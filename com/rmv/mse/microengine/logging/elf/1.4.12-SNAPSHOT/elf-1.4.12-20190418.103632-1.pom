@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rmv.mse.microengine.logging</groupId>
+    <artifactId>elf</artifactId>
+    <version>1.4.12-SNAPSHOT</version>
+    <name>ELK Logging Framework</name>
+<description>
+        1.4.9 - fix chaining
+        1.4.8 support override hostname by env param: ELF_HOSTNAME
+        1.4.1 - support TransactionException throwing
+        1.4 - fix nullpointer exception ,
+            - split activity log to other topic,
+            - add hostname field
+        1.3 fix memory leak
+        1.2 support transaction response as map
+        1.1 check file
+        process-&gt;function
+        change camel to underscore.
+
+</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.6.RELEASE</version>
+
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.stefanbirkner/system-rules -->
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.18.0</version>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+    <distributionManagement>
+        <!--<snapshotRepository>-->
+            <!--<uniqueVersion>true</uniqueVersion>-->
+            <!--<id>snapshots</id>-->
+            <!--<name>snapshots</name>-->
+            <!--<url>http://sourceserver:8081/nexus/content/repositories/snapshots</url>-->
+        <!--</snapshotRepository>-->
+        <!--<repository>-->
+            <!--<id>releases</id>-->
+            <!--<name>releases</name>-->
+            <!--<url>http://sourceserver:8081/nexus/content/repositories/releases</url>-->
+        <!--</repository>-->
+        <snapshotRepository>
+            <id>release</id>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <scm>
+        <connection>scm:git:http://git.true.th/MSE-DevX/elk-logging-framwork.git</connection>
+        <developerConnection>scm:git:http://git.true.th/MSE-DevX/elk-logging-framwork.git</developerConnection>
+      <tag>HEAD</tag>
+  </scm>
+
+
+
+    <build>
+
+        <!--https://stackoverflow.com/questions/4251488/maven-release-plugin-fails-source-artifacts-getting-deployed-twice-->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!-- This id must match the -Prelease-profile id value or else sources will be "uploaded" twice, which causes Nexus to fail -->
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includePom>true</includePom>
+                        <forceCreation>true</forceCreation>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.9.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+		</plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!--<includes>-->
+                    <!--<include>version.properties</include>-->
+                <!--</includes>-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+	</build>
+
+</project>
